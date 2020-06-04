@@ -6,8 +6,8 @@
  * Version: 1.0.0
  * Author: vendidero
  * Author URI: https://vendidero.de
- * WC requires at least: 2.4.0
- * WC tested up to: 3.6.0
+ * WC requires at least: 3.0.0
+ * WC tested up to: 4.2.0
  *
  * @author vendidero
  */

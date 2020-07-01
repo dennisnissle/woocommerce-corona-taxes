@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Corona Taxes
  * Description: This plugin uses the Woo action scheduler to adjust german tax rates automatically on 01.07.20 and 01.01.21.
  * Plugin URI: https://vendidero.de/
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: vendidero
  * Author URI: https://vendidero.de
  * WC requires at least: 3.0.0
@@ -16,14 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-add_action( 'init', 'wc_corona_schedule_event' );
-add_action( 'wc_corona_adjust_taxes_start', 'wc_corona_adjust_taxes_start_callback' );
+add_action( 'init', 'wc_corona_schedule_end_event' );
 add_action( 'wc_corona_adjust_taxes_end', 'wc_corona_adjust_taxes_end_callback' );
 
 /**
  * Queue Woo events
  */
-function wc_corona_schedule_event() {
+function wc_corona_schedule_end_event() {
 	$queue = WC()->queue();
 
 	$end_date     = defined( 'WC_CORONA_END_DATE' ) ? WC_CORONA_END_DATE : '2021-01-01';
@@ -37,9 +36,7 @@ function wc_corona_schedule_event() {
     }
 }
 
-function wc_corona_adjust_taxes_start_callback() {
-
-}
+function wc_corona_adjust_taxes_start_callback() {}
 
 function wc_corona_adjust_taxes_end_callback() {
 	if ( class_exists( 'WC_GZD_Install' ) ) {
@@ -59,6 +56,21 @@ function wc_corona_maybe_show_notice() {
 			</p>
 		</div>
 		<?php
+	}
+
+	$end_date = new DateTime( defined( 'WC_CORONA_END_DATE' ) ? WC_CORONA_END_DATE : '2021-01-01' );
+	$now      = new DateTime();
+
+	if ( $now > $end_date ) {
+	    $plugin_file           = basename( dirname( __FILE__ ) ) . '/' . basename( __FILE__ );
+		$deactivate_plugin_url = wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . urlencode( $plugin_file ), 'deactivate-plugin_' . $plugin_file );
+		?>
+        <div id="message" class="error">
+            <p>
+				<?php printf( 'The Corona Tax timespan is over. You might <a href="%s">deactivate</a> this plugin.', $deactivate_plugin_url ); ?>
+            </p>
+        </div>
+        <?php
 	}
 }
 

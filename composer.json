@@ -1,6 +1,6 @@
 {
     "name": "vendidero/woocommerce-corona-taxes",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "type": "wordpress-plugin",
     "description": "This plugin uses the Woo action scheduler to adjust german tax rates automatically on 01.07.20 and 01.01.21.",
     "license": "GPL-2.0-or-later",

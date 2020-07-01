@@ -38,12 +38,7 @@ function wc_corona_schedule_event() {
 }
 
 function wc_corona_adjust_taxes_start_callback() {
-	if ( class_exists( 'WC_GZD_Install' ) ) {
-		WC_GZD_Install::create_tax_rates( 16, 5 );
-		WC_GZD_Install::create_virtual_tax_rates( array( 'DE' => 16 ) );
 
-		wc_get_logger()->log(  'info', 'Corona tax rates updated to 16% and 5% successfully' );
-	}
 }
 
 function wc_corona_adjust_taxes_end_callback() {

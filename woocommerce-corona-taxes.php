@@ -27,12 +27,14 @@ function wc_corona_schedule_event() {
 	$queue = WC()->queue();
 
 	$end_date     = defined( 'WC_CORONA_END_DATE' ) ? WC_CORONA_END_DATE : '2021-01-01';
-	$utc          = new DateTimeZone('UTC');
-	$end_date_utc = new DateTime( $end_date, $utc );
+	$end_date_obj = new DateTime( $end_date, new DateTimeZone( 'UTC' ) );
+	$now          = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
 
-	if ( ! $queue->get_next( 'wc_corona_adjust_taxes_end', array(), 'woocommerce-corona-taxes' ) ) {
-		$queue->schedule_single( intval( $end_date_utc->getTimestamp() ), 'wc_corona_adjust_taxes_end', array(), 'woocommerce-corona-taxes' );
-	}
+	if ( $now < $end_date_obj ) {
+		if ( ! $queue->get_next( 'wc_corona_adjust_taxes_end', array(), 'woocommerce-corona-taxes' ) ) {
+			$queue->schedule_single( intval( $end_date_obj->getTimestamp() ), 'wc_corona_adjust_taxes_end', array(), 'woocommerce-corona-taxes' );
+		}
+    }
 }
 
 function wc_corona_adjust_taxes_start_callback() {
